@@ -157,7 +157,7 @@ def validate_tokens(tokens):
 
 
 def main():
-    filepath = Path('sample/main.cpp')
+    filepath = Path('sample/unused.cpp')
 
     with open(str(filepath)) as f:
         code = f.read()

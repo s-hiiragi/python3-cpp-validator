@@ -157,6 +157,23 @@ def validate_tokens(tokens):
     return errors
 
 
+def print_validate_error(infile, code, errors):
+    lines = code.replace('\r\n', '\n').split('\n')
+    
+    for error in errors:
+        token = error.token
+        prefix = f'{infile.name}:{token.lineno}:{token.columnno}: '
+
+        print(f'{prefix}{error.message}')
+
+        # XXX ^の位置がずれるのでタブを空白1つに置き換える
+        error_line = lines[token.lineno - 1].replace('\t', ' ')
+        print(f'{prefix}note: {error_line}')
+
+        hat = ' ' * (token.columnno - 1) + '^'
+        print(f'{prefix}note: {hat}')
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('infile')
@@ -176,22 +193,7 @@ def main():
 
     if errors := validate_tokens(tokens):
         print('ERROR: validate was failed')
-
-        lines = code.replace('\r\n', '\n').split('\n')
-        
-        for error in errors:
-            token = error.token
-            prefix = f'{infile.name}:{token.lineno}:{token.columnno}: '
-
-            print(f'{prefix}{error.message}')
-
-            # XXX ^の位置がずれるのでタブを空白1つに置き換える
-            error_line = lines[token.lineno - 1].replace('\t', ' ')
-            print(f'{prefix}note: {error_line}')
-
-            hat = ' ' * (token.columnno - 1) + '^'
-            print(f'{prefix}note: {hat}')
-
+        print_validate_error(infile, code, errors)
         return 1
 
 

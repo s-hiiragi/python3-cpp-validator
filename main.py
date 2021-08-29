@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+import argparse
 from pathlib import Path
 from collections import namedtuple
 from typing import NamedTuple
@@ -157,9 +158,13 @@ def validate_tokens(tokens):
 
 
 def main():
-    filepath = Path('sample/unused.cpp')
+    parser = argparse.ArgumentParser()
+    parser.add_argument('infile')
+    args = parser.parse_args()
 
-    with open(str(filepath)) as f:
+    infile = Path(args.infile)
+
+    with open(str(infile)) as f:
         code = f.read()
 
     tokens = tokenize(code)
@@ -176,7 +181,7 @@ def main():
         
         for error in errors:
             token = error.token
-            prefix = f'{filepath.name}:{token.lineno}:{token.columnno}: '
+            prefix = f'{infile.name}:{token.lineno}:{token.columnno}: '
 
             print(f'{prefix}{error.message}')
 

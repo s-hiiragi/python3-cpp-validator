@@ -80,6 +80,7 @@ def print_validate_error(infile: str, code: str, errors: Sequence[ValidateError]
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument('--test-tokenize', action='store_true')
     parser.add_argument('infile')
     args = parser.parse_args()
 
@@ -93,7 +94,9 @@ def main():
         print('ERROR: tokenize was failed')
         return 1
 
-    #print(tokens)
+    if args.test_tokenize:
+        print(tokens)
+        return
 
     if errors := validate_tokens(tokens):
         print('ERROR: validate was failed')

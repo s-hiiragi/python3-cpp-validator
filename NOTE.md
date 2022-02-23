@@ -8,7 +8,7 @@
 - (unused) メンバを誤ってエラー扱いしないようにする
 
 
-## Validate directives
+## Validation directives
 
 ### unused
 

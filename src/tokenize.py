@@ -67,6 +67,23 @@ def tokenize(code: str) -> list[Token]:
         elif m := re.match(r'//[^\n]+', subcode):
             i += len(m.group())
 
+        # ブロックコメント
+        elif m := re.match(r'/\*', subcode):
+            i += 2
+
+            while i < len(code):
+                subcode = code[i:]
+
+                if re.match(r'\*/', subcode):
+                    i += 2
+                    break
+                elif subcode[0] == '\n':
+                    i += 1
+                    lineno += 1
+                    linestart = i
+                else:
+                    i += 1
+
         # 改行
         elif subcode[0] == '\n':
             i += 1

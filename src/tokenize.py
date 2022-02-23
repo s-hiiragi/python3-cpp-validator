@@ -38,7 +38,7 @@ class Token(NamedTuple):
         return repr(self)
 
 
-def tokenize(code):
+def tokenize(code: str) -> list[Token]:
     code = code.replace('\r\n', '\n')
 
     tokens = []

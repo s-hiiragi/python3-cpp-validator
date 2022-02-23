@@ -92,14 +92,23 @@ def tokenize(code: str) -> list[Token]:
             token = Token('str', m.group(), lineno, columnno())
             i += len(m.group())
 
-        # 記号
-        elif m := re.match(r'\+\+|--|[-+*/%&|^=!<>]=|&&|(?:\|\|)|(<<|>>)=?|->\*?|\.\*|::\*?', subcode):
+        # 記号 (3文字)
+        elif m := re.match(r'->\*|<<=|>>=', subcode):
+            token = Token('mark', m.group(), lineno, columnno())
+            i += len(m.group())
+
+        # 記号 (2文字)
+        elif m := re.match(r'->|\+\+|--|\.\*|<<|>>|[<>=!+\-*/%&^|]=|&&|\|\|', subcode):
+            token = Token('mark', m.group(), lineno, columnno())
+            i += len(m.group())
+
+        # 記号 (1文字)
+        elif m := re.match(r'[()[\]{}.,:?+\-*/%~&^|=!]', subcode):
             token = Token('mark', m.group(), lineno, columnno())
             i += len(m.group())
 
         else:
-            token = Token('mark', subcode[0], lineno, columnno())
-            i += 1
+            raise Exception(f"Unknown character '{subcode[0]}' at {lineno}:{columnno()}")
 
         if token:
             tokens.append(token)
